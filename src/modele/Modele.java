@@ -6,6 +6,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import controleur.Candidat;
+import controleur.Departement;
 import controleur.User;
 
 
@@ -208,6 +209,130 @@ public class Modele {
 	
 	public static void deleteCandidat(int id) {
 		String requete = "delete from candidat where id = " + id +";" ;
+		
+		try {
+			uneBdd.seConnecter();
+			Statement unStat = uneBdd.getMaConnexion().createStatement(); //curseur 
+			unStat.execute(requete);
+			unStat.close(); 
+			uneBdd.seDeconnecter();
+		}
+		catch (SQLException exp)
+		{
+			System.out.println("Erreur execution requete : " + requete);
+		}
+		
+	}
+	/********************************** GESTION DES DEPARTEMENTS ***********************************/
+	public static void insertDepartement(Departement unDepartement)
+	{
+		String requete = "insert into departement values (null, '" 
+	+ unDepartement.getNomdepartement()+"');";
+		
+	try {
+			uneBdd.seConnecter();
+			Statement unStat = uneBdd.getMaConnexion().createStatement(); //curseur 
+			unStat.execute(requete);
+			unStat.close(); 
+			uneBdd.seDeconnecter();
+		}
+	catch (SQLException exp)
+		{
+			System.out.println("Erreur execution requete : " + requete);
+		}
+	}
+	public static void updateDepartement(Departement unDepartement)
+	{
+		String requete = "update departement set nomdepartement ='" + unDepartement.getNomdepartement()
+		+"' where numdepartement = "+unDepartement.getNumdepartement();
+		
+		try {
+			uneBdd.seConnecter();
+			Statement unStat = uneBdd.getMaConnexion().createStatement(); //curseur 
+			unStat.execute(requete);
+			unStat.close(); 
+			uneBdd.seDeconnecter();
+		}
+		catch (SQLException exp)
+		{
+			System.out.println("Erreur execution requete : " + requete);
+		}
+	}
+//=============================================================================
+	public static ArrayList<Departement> selectAllDepartements(int numdepartement) {
+		 
+		ArrayList<Departement> lesDepartements = new ArrayList<Departement>(); 
+		String requete ; 
+		if (numdepartement == 0) {
+			requete = "select * from departement"; 
+		}
+		else {
+			requete= "select * from departement where numdepartement = " + numdepartement + " ; "; 
+		}
+		try {
+			uneBdd.seConnecter();
+			Statement unStat = uneBdd.getMaConnexion().createStatement(); //curseur 
+			ResultSet desResultats = unStat.executeQuery(requete); //fetchAll de PHP 
+			//parcours des résultats pour construire les instances de Techniciens 
+			while (desResultats.next()) //tant qu'il y a un résultat suivant 
+			{
+				//instancier la classe Technicien : créer un objet Technicien
+				Departement unDepartement = new Departement (
+						desResultats.getInt ("numdepartement"),
+						desResultats.getString ("nomdepartement")
+						);
+				//On ajoute cet objet à la liste des Techniciens 
+				lesDepartements.add(unDepartement);
+			}
+			unStat.close(); 
+			uneBdd.seDeconnecter();
+		}
+		catch (SQLException exp)
+		{
+			System.out.println("Erreur execution requete : " + requete);
+		}
+		return lesDepartements; 
+	}
+	//=============================================================================
+	public static ArrayList<Departement> selectAllDepartements(String mot) {
+		 
+		ArrayList<Departement> lesDepartements = new ArrayList<Departement>(); 
+		String requete ; 
+		if (mot.equals("") ) {
+			requete = "select * from departement"; 
+		}
+		else {
+			requete= "select * from vehicule where nomdepartement like '%"+mot+"' ;";  
+		}
+		try {
+			uneBdd.seConnecter();
+			Statement unStat = uneBdd.getMaConnexion().createStatement(); //curseur 
+			ResultSet desResultats = unStat.executeQuery(requete); //fetchAll de PHP 
+			//parcours des résultats pour construire les instances de Techniciens 
+			while (desResultats.next()) //tant qu'il y a un résultat suivant 
+			{
+				//instancier la classe Technicien : créer un objet Technicien
+				Departement unDepartement = new Departement (
+						desResultats.getInt ("numdepartement"),
+						desResultats.getString ("nomdepartement")
+						);
+				//On ajoute cet objet à la liste des Techniciens 
+				lesDepartements.add(unDepartement);
+			}
+			unStat.close(); 
+			uneBdd.seDeconnecter();
+		}
+		catch (SQLException exp)
+		{
+			System.out.println("Erreur execution requete : " + requete);
+		}
+		return lesDepartements; 
+	}
+	//====================================================================================
+	
+	
+	public static void deleteDepartement(int numdepartement) {
+		String requete = "delete from departement where numdepartement = " + numdepartement +";" ;
 		
 		try {
 			uneBdd.seConnecter();

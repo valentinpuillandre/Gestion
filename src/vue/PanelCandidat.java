@@ -11,6 +11,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -19,6 +20,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 
 import controleur.Candidat;
+import controleur.Departement;
 import controleur.Tableau;
 import modele.Modele;
 
@@ -37,7 +39,7 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 	private JTextField txtMail = new JTextField();
 	private JTextField txtMdp = new JTextField();
 	private JTextField txtRole = new JTextField();
-	private JTextField txtNumd = new JTextField();
+	private JComboBox<String> txtNumd = new JComboBox<String>();
 	
 	
 	private JTable uneTable ; 
@@ -54,11 +56,11 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 		super(new Color(84, 140, 168));
 		
 		//=================================CONSTRUCTION DU PANEL FORM===============================
-		this.panelForm.setLayout(new GridLayout(6,2));
-		this.panelForm.setBounds(20, 40, 250, 340);
+		this.panelForm.setLayout(new GridLayout(10,1));
+		this.panelForm.setBounds(10,20, 270, 340);
 		this.panelForm.setBackground(Color.gray);
 		
-		this.panelForm.add(new JLabel("Prénom Candidat : "));
+		this.panelForm.add(new JLabel("Pr�nom Candidat : "));
 		this.panelForm.add(this.txtPrenom);
 		
 		this.panelForm.add(new JLabel("Nom Candidat : "));
@@ -88,6 +90,12 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 		this.panelForm.add(this.btAnnuler);
 		this.panelForm.add(this.btEnregistrer);
 		this.add(this.panelForm); 
+		
+		for (Departement unDepartement : Modele.selectAllDepartements(""))
+		{
+			this.txtNumd.addItem(unDepartement.getNumdepartement()+"-"+unDepartement.getNomdepartement());
+		}
+		
 		
 		//============================CONSTRUCTION DU PANEL DE RECHERCHE============================= 
 		this.panelRechercher.setLayout(new GridLayout(1,3));
@@ -167,6 +175,7 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 							txtMail.setText(unTableau.getValueAt(numLigne,6).toString());
 							txtMdp.setText(unTableau.getValueAt(numLigne,7).toString());
 							txtRole.setText(unTableau.getValueAt(numLigne,8).toString());
+							//txtNumd.setText(unTableau.getValueAt(numLigne,9).toString());
 							btEnregistrer.setText("Modifier");
 						}
 					}
@@ -248,7 +257,7 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 				String mail = this.txtMail.getText(); 
 				String mdp = this.txtMdp.getText();
 				String role = this.txtRole.getText();
-				String chaine = this.txtNumd.getSelectedText().toString(); 
+				String chaine = this.txtNumd.getSelectedItem().toString(); 
 				String tab [] = chaine.split("-");
 				int numd = Integer.parseInt(tab[0]);  
 				
@@ -283,7 +292,7 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 								//on récupère le client inséré pour son nouveau ID 
 								unCandidat = Modele.selectWhereCandidat(mail); 
 								
-								Object ligne[] ={unCandidat.getId(), unCandidat.getNumd(), unCandidat.getPrenom(), 
+								Object ligne[] ={unCandidat.getId(), unCandidat.getPrenom(), 
 										unCandidat.getNom(), unCandidat.getAdresse(),unCandidat.getCp(),unCandidat.getVille(),
 										 unCandidat.getMail(),unCandidat.getMdp(),unCandidat.getRole(),
 										 unCandidat.getNumd()}; 
@@ -296,7 +305,7 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 					//update dans la base de données 
 					Modele.updateCandidat(unCandidat);
 					//update dans le tableau d'affichage 
-					Object ligne[] ={unCandidat.getId(), unCandidat.getNumd(), unCandidat.getPrenom(), 
+					Object ligne[] ={unCandidat.getId(), unCandidat.getPrenom(), 
 							unCandidat.getNom(), unCandidat.getAdresse(),unCandidat.getCp(),unCandidat.getVille(),
 							 unCandidat.getMail(),unCandidat.getMdp(),unCandidat.getRole(),
 							 unCandidat.getNumd()}; 
