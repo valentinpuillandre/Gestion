@@ -30,7 +30,7 @@ public class VueGenerale extends JFrame implements ActionListener {
 	//instanciation des Panels 
 	
 		private PanelCandidat unPanelCandidats  = new PanelCandidat();
-		
+		private PanelProfessionel unPanelProfessionels  = new PanelProfessionel();
 	
 	
 	private JPanel panelMenu = new JPanel(); 
@@ -41,7 +41,7 @@ public class VueGenerale extends JFrame implements ActionListener {
 		//====================================Page principal logiciel=========================
 		this.setTitle("Administration Kanyu"); //titre
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//fermeture
-		this.setBounds(200,100,900,500); //position et hauteur/largeur
+		this.setBounds(200,100,900,550); //position et hauteur/largeur
 		this.setLayout(null);
 		this.getContentPane().setBackground(Color.BLACK);//couleur de fond de la page
 		this.setResizable(false);//impossible à agrandir ou rétrecir 
@@ -107,6 +107,7 @@ public class VueGenerale extends JFrame implements ActionListener {
 		//ajout des panels dans la fenetre 
 		  
 		 this.add(this.unPanelCandidats); 
+		 this.add(this.unPanelProfessionels);
 		 
 		this.setVisible(true);
 	}
@@ -128,13 +129,15 @@ public class VueGenerale extends JFrame implements ActionListener {
 			}
 		else if (e.getSource() == this.btCandidat)
 		{
-			
+			this.unPanelProfessionels.setVisible(false);
 			this.unPanelCandidats.setVisible(true);
 			
+			
 		}
-		else if(e.getSource() ==this.btCandidature)
+		else if(e.getSource() ==this.btProfessionel)
 		{
-			this.panelProfil.setVisible(true);
+			this.unPanelCandidats.setVisible(false);
+			this.unPanelProfessionels.setVisible(true);
 		}
 			
 	}

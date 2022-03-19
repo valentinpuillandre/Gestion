@@ -19,27 +19,31 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
-import controleur.Candidat;
-import controleur.Departement;
+import controleur.Professionel;
 import controleur.Tableau;
 import modele.Modele;
 
-public class PanelCandidat extends PanelDeBase implements ActionListener, KeyListener {
+public class PanelProfessionel extends PanelDeBase implements ActionListener, KeyListener {
+
+	public PanelProfessionel(Color uneCouleur) {
+		super(uneCouleur);
+		// TODO Auto-generated constructor stub
+	}
 
 	private JPanel panelForm = new JPanel(); 
 	private JButton btAnnuler = new JButton("Annuler"); 
 	private JButton btEnregistrer = new JButton("Enregistrer"); 
 	
 	
-	private JTextField txtPrenom = new JTextField();
 	private JTextField txtNom = new JTextField();
 	private JTextField txtAdresse = new JTextField();
 	private JTextField txtCp = new JTextField();
 	private JTextField txtVille = new JTextField();
 	private JTextField txtMail = new JTextField();
 	private JTextField txtMdp = new JTextField();
+	private JTextField txtSiret = new JTextField();
 	private JTextField txtRole = new JTextField();
-	private JComboBox<String> txtNumd = new JComboBox<String>();
+	
 	
 	
 	private JTable uneTable ; 
@@ -52,18 +56,16 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 	
 	
 	
-	public PanelCandidat() {
-		super(new Color(84, 140, 168));
+	public PanelProfessionel() {
+		super(new Color(13, 28, 74));
 		
 		//=================================CONSTRUCTION DU PANEL FORM===============================
 		this.panelForm.setLayout(new GridLayout(10,1));
-		this.panelForm.setBounds(10,20, 270, 340);
+		this.panelForm.setBounds(10,20, 270, 390);
 		this.panelForm.setBackground(Color.gray);
 		
-		this.panelForm.add(new JLabel("Prénom Candidat : "));
-		this.panelForm.add(this.txtPrenom);
 		
-		this.panelForm.add(new JLabel("Nom Candidat : "));
+		this.panelForm.add(new JLabel("Nom Professionel : "));
 		this.panelForm.add(this.txtNom);
 		
 		this.panelForm.add(new JLabel("Adresse : "));
@@ -81,27 +83,24 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 		this.panelForm.add(new JLabel("Mot de passe : "));
 		this.panelForm.add(this.txtMdp);
 		
+		this.panelForm.add(new JLabel("Siret : "));
+		this.panelForm.add(this.txtSiret);
+		
 		this.panelForm.add(new JLabel("Role : "));
 		this.panelForm.add(this.txtRole);
 		
-		this.panelForm.add(new JLabel("Departement : "));
-		this.panelForm.add(this.txtNumd);
 		
 		this.panelForm.add(this.btAnnuler);
 		this.panelForm.add(this.btEnregistrer);
 		this.add(this.panelForm); 
 		
-		for (Departement unDepartement : Modele.selectAllDepartements(""))
-		{
-			this.txtNumd.addItem(unDepartement.getNumdepartement()+"-"+unDepartement.getNomdepartement());
-		}
 		
 		
 		//============================CONSTRUCTION DU PANEL DE RECHERCHE============================= 
 		this.panelRechercher.setLayout(new GridLayout(1,3));
 		this.panelRechercher.setBounds(300, 40, 460, 20);
 		this.panelRechercher.setBackground(Color.gray);
-		this.panelRechercher.add(new JLabel("Filtrer les candidats : "));
+		this.panelRechercher.add(new JLabel("Filtrer les professionels : "));
 		this.panelRechercher.add(this.txtMot); 
 		this.panelRechercher.add(this.btRechercher); 
 		this.add(this.panelRechercher); 
@@ -110,20 +109,20 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 		this.btAnnuler.addActionListener(this);
 		this.btEnregistrer.addActionListener(this);
 		this.btRechercher.addActionListener(this);
-		this.txtPrenom.addKeyListener(this);
 		this.txtNom.addKeyListener(this);
 		this.txtAdresse.addKeyListener(this);
 		this.txtCp.addKeyListener(this);
 		this.txtVille.addKeyListener(this);
 		this.txtMail.addKeyListener(this);
 		this.txtMdp.addKeyListener(this);
+		this.txtSiret.addKeyListener(this);
 		this.txtRole.addKeyListener(this);
-		this.txtNumd.addKeyListener(this);
+		
 		
 		//=======================CONSTRUCTION DE LA TABLE==============================================
-		String entetes [] = {"Id","Prenom","Nom","Adresse","Code postal","Ville","Mail","Mot de passe","Role","ID dep"};
+		String entetes [] = {"Id","Nom","Adresse","Code postal","Ville","Mail","Mot de passe","Siret","Role"};
 		
-		Object donnees [][] = this.getDonnees ("") ; //select tous les candidats  
+		Object donnees [][] = this.getDonnees ("") ; //select tous les professionels  
 		this.unTableau = new Tableau (entetes, donnees); 
 		
 		this.uneTable = new JTable(unTableau); 
@@ -156,26 +155,27 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 						int numLigne = uneTable.getSelectedRow(); 
 						if( nbClic == 2 )
 						{
-							int retour = JOptionPane.showConfirmDialog(null,  "Voulez-vous supprimer le client ?", 
-									"Suppression Candidat", JOptionPane.YES_NO_OPTION); 
+							int retour = JOptionPane.showConfirmDialog(null,  "Voulez-vous supprimer le professionel ?", 
+									"Suppression Professionel", JOptionPane.YES_NO_OPTION); 
 							if(retour ==0) {
 								int id = Integer.parseInt(unTableau.getValueAt(numLigne,0).toString()); 
-								//on supprime le candidat dans la base 
+								//on supprime le professionel dans la base 
 								Modele.deleteCandidat(id);
 								//on le supprime de l'affichage 
 								unTableau.supprimerLigne(numLigne);
 							}
 						}else if (nbClic==1)
 						{
-							txtPrenom.setText(unTableau.getValueAt(numLigne,1).toString());
-							txtNom.setText(unTableau.getValueAt(numLigne,2).toString());
-							txtAdresse.setText(unTableau.getValueAt(numLigne,3).toString());
-							txtCp.setText(unTableau.getValueAt(numLigne,4).toString());
-							txtVille.setText(unTableau.getValueAt(numLigne,5).toString());
-							txtMail.setText(unTableau.getValueAt(numLigne,6).toString());
-							txtMdp.setText(unTableau.getValueAt(numLigne,7).toString());
+							
+							txtNom.setText(unTableau.getValueAt(numLigne,1).toString());
+							txtAdresse.setText(unTableau.getValueAt(numLigne,2).toString());
+							txtCp.setText(unTableau.getValueAt(numLigne,3).toString());
+							txtVille.setText(unTableau.getValueAt(numLigne,4).toString());
+							txtMail.setText(unTableau.getValueAt(numLigne,5).toString());
+							txtMdp.setText(unTableau.getValueAt(numLigne,6).toString());
+							txtSiret.setText(unTableau.getValueAt(numLigne,7).toString());
 							txtRole.setText(unTableau.getValueAt(numLigne,8).toString());
-							//txtNumd.setText(unTableau.getValueAt(numLigne,9).toString());
+							
 							btEnregistrer.setText("Modifier");
 						}
 					}
@@ -187,21 +187,20 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 
 			public Object [][] getDonnees (String mot)
 			{
-				ArrayList<Candidat> lesCandidats = Modele.selectAllCandidats(mot); 
-				Object [][] matrice = new Object [lesCandidats.size()][10]; 
+				ArrayList<Professionel> lesProfessionels = Modele.selectAllProfessionels(mot); 
+				Object [][] matrice = new Object [lesProfessionels.size()][9]; 
 				int i=0; 
-				for (Candidat unCandidat : lesCandidats)
+				for (Professionel unProfessionel : lesProfessionels)
 				{
-					matrice[i][0] = unCandidat.getId(); 
-					matrice[i][1] = unCandidat.getPrenom(); 
-					matrice[i][2] = unCandidat.getNom(); 
-					matrice[i][3] = unCandidat.getAdresse(); 
-					matrice[i][4] = unCandidat.getCp(); 
-					matrice[i][5] = unCandidat.getVille();
-					matrice[i][6] = unCandidat.getMail();
-					matrice[i][7] = unCandidat.getMdp();
-					matrice[i][8] = unCandidat.getRole();
-					matrice[i][9] = unCandidat.getNumd();
+					matrice[i][0] = unProfessionel.getId(); 
+					matrice[i][1] = unProfessionel.getNom(); 
+					matrice[i][2] = unProfessionel.getAdresse(); 
+					matrice[i][3] = unProfessionel.getCp(); 
+					matrice[i][4] = unProfessionel.getVille();
+					matrice[i][5] = unProfessionel.getMail();
+					matrice[i][6] = unProfessionel.getMdp();
+					matrice[i][7] = unProfessionel.getSiret(); 
+					matrice[i][8] = unProfessionel.getRole();
 					i++; 
 				}
 				return matrice ; 
@@ -229,87 +228,81 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 			}
 			public void viderChamps()
 			{
-				this.txtPrenom.setText("");
+				
 				this.txtNom.setText("");
 				this.txtAdresse.setText("");
 				this.txtCp.setText("");
 				this.txtVille.setText("");
 				this.txtMail.setText("");
 				this.txtMdp.setText("");
+				this.txtSiret.setText("");
 				
 				this.btEnregistrer.setText("Enregistrer");
 				
-				this.txtPrenom.setBackground(Color.white);
+				
 				this.txtNom.setBackground(Color.white);
 				this.txtAdresse.setBackground(Color.white);
 				this.txtCp.setBackground(Color.white);
 				this.txtVille.setBackground(Color.white);
 				this.txtMail.setBackground(Color.white);
 				this.txtMdp.setBackground(Color.white);
+				this.txtSiret.setBackground(Color.white);
 			}
 			
 			public void traitement (int choix)
 			{
-				String prenom = this.txtPrenom.getText();
+				
 				String nom = this.txtNom.getText(); 
 				String adresse = this.txtAdresse.getText();
 				String cp = this.txtCp.getText();
 				String ville = this.txtVille.getText();
 				String mail = this.txtMail.getText(); 
 				String mdp = this.txtMdp.getText();
+				String siret = this.txtSiret.getText();
 				String role = this.txtRole.getText();
-				String chaine = this.txtNumd.getSelectedItem().toString(); 
-				String tab [] = chaine.split("-");
-				int numd = Integer.parseInt(tab[0]);  
+				 
 				
 				if (nom.equals(""))  {
 					this.txtNom.setBackground(Color.red);
 				}else {
 					this.txtNom.setBackground(Color.white);
 				}
-				if (prenom.equals("")) {
-					this.txtPrenom.setBackground(Color.red);
-				}else {
-					this.txtPrenom.setBackground(Color.white);
-				}
 				if (mail.equals("")){
 					this.txtMail.setBackground(Color.red);
 				}else {
 					this.txtMail.setBackground(Color.white);
 				}
-				if (nom.equals("") || prenom.equals("") || mail.equals("")){
+				if (nom.equals("") || mail.equals("") || siret.equals("")){
 					JOptionPane.showMessageDialog(this, "Veuillez remplir les champs obligatoires");
 					//this.viderChamps();
 				}
 				else { if (choix == 0) {
 								//instancier la classe Candidat 
-								Candidat unCandidat = new Candidat(0,numd, prenom, nom, adresse, cp, ville,mail,mdp,role); 
+								Professionel unProfessionel = new Professionel(0, nom, adresse, cp, ville,mail,mdp,siret,role); 
 								
 								//Insertion dans la BDD 
-								Modele.insertCandidat(unCandidat);
+								Modele.insertProfessionel(unProfessionel);
 								
-								JOptionPane.showMessageDialog(this, "Insertion rÃ©ussie dans la base");
+								JOptionPane.showMessageDialog(this, "Insertion reussie dans la base");
 								
 								//on récupérer le candidat inséré pour son nouvel ID 
-								unCandidat = Modele.selectWhereCandidat(mail); 
+								unProfessionel = Modele.selectWhereProfessionel(mail); 
 								
-								Object ligne[] ={unCandidat.getId(), unCandidat.getPrenom(), 
-										unCandidat.getNom(), unCandidat.getAdresse(),unCandidat.getCp(),unCandidat.getVille(),
-										 unCandidat.getMail(),unCandidat.getMdp(),unCandidat.getRole(),
-										 unCandidat.getNumd()}; 
+								Object ligne[] ={unProfessionel.getId(), 
+										unProfessionel.getNom(), unProfessionel.getAdresse(),unProfessionel.getCp(),unProfessionel.getVille(),
+										unProfessionel.getMail(),unProfessionel.getMdp(),unProfessionel.getSiret(),unProfessionel.getRole()}; 
 								
 								this.unTableau.ajouterLigne(ligne);
 				}else {
 					int numLigne = this.uneTable.getSelectedRow(); 
 					int id = Integer.parseInt(this.unTableau.getValueAt(numLigne, 0).toString()); 
-					Candidat unCandidat = new Candidat(id,numd, prenom,nom, adresse, cp,ville,mail,mdp,role);
+					Professionel unProfessionel = new Professionel(id,nom, adresse, cp,ville,mail,mdp,siret,role);
 					//update dans la base de données
-					Modele.updateCandidat(unCandidat);
+					Modele.updateProfessionel(unProfessionel);
 					//update dans le tableau d'affichage 
-					Object ligne[] ={unCandidat.getId(), unCandidat.getPrenom(), 
-							unCandidat.getNom(), unCandidat.getAdresse(),unCandidat.getCp(),unCandidat.getVille(),
-							 unCandidat.getMail(),unCandidat.getMdp(),unCandidat.getRole(),
-							 unCandidat.getNumd()}; 
+					Object ligne[] ={unProfessionel.getId(),
+							unProfessionel.getNom(), unProfessionel.getAdresse(),unProfessionel.getCp(),unProfessionel.getVille(),
+							unProfessionel.getMail(),unProfessionel.getMdp(),unProfessionel.getSiret(),unProfessionel.getRole()}; 
 					this.unTableau.modifierLigne (numLigne, ligne); 
 				}
 				
@@ -318,7 +311,15 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 				}
 	
 			}
-
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	@Override
 	public void keyTyped(KeyEvent e) {

@@ -10,7 +10,7 @@ public class PanelDeBase extends JPanel{
 	{
 		this.setBackground(uneCouleur);
 		this.setLayout(null);
-		this.setBounds(40, 80, 800, 380);
+		this.setBounds(50, 90, 800, 380); //BOUGER LE PANNEAU DE BASE EN FOND DES PAGES
 		this.setVisible(false);
 	}
 }

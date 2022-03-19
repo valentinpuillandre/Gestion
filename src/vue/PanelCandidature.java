@@ -20,26 +20,34 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 
 import controleur.Candidat;
+import controleur.Candidature;
+import controleur.Secteur;
+import controleur.User;
 import controleur.Departement;
+import controleur.Poste;
+
+
+
 import controleur.Tableau;
 import modele.Modele;
 
-public class PanelCandidat extends PanelDeBase implements ActionListener, KeyListener {
+public class PanelCandidature extends PanelDeBase implements ActionListener, KeyListener {
+
+	public PanelCandidature(Color uneCouleur) {
+		super(uneCouleur);
+		// TODO Auto-generated constructor stub
+	}
 
 	private JPanel panelForm = new JPanel(); 
 	private JButton btAnnuler = new JButton("Annuler"); 
 	private JButton btEnregistrer = new JButton("Enregistrer"); 
 	
 	
-	private JTextField txtPrenom = new JTextField();
-	private JTextField txtNom = new JTextField();
-	private JTextField txtAdresse = new JTextField();
-	private JTextField txtCp = new JTextField();
-	private JTextField txtVille = new JTextField();
-	private JTextField txtMail = new JTextField();
-	private JTextField txtMdp = new JTextField();
-	private JTextField txtRole = new JTextField();
-	private JComboBox<String> txtNumd = new JComboBox<String>();
+
+	private JComboBox<String> txtIdsecteur = new JComboBox<String>();
+	private JComboBox<String> txtId = new JComboBox<String>();
+	private JComboBox<String> txtNumdepartement = new JComboBox<String>();
+	private JComboBox<String> txtIdposte = new JComboBox<String>();
 	
 	
 	private JTable uneTable ; 
@@ -52,7 +60,7 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 	
 	
 	
-	public PanelCandidat() {
+	public PanelCandidature() {
 		super(new Color(84, 140, 168));
 		
 		//=================================CONSTRUCTION DU PANEL FORM===============================
@@ -60,40 +68,37 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 		this.panelForm.setBounds(10,20, 270, 340);
 		this.panelForm.setBackground(Color.gray);
 		
-		this.panelForm.add(new JLabel("Prénom Candidat : "));
-		this.panelForm.add(this.txtPrenom);
+		this.panelForm.add(new JLabel("Secteur : "));
+		this.panelForm.add(this.txtIdsecteur);
 		
-		this.panelForm.add(new JLabel("Nom Candidat : "));
-		this.panelForm.add(this.txtNom);
-		
-		this.panelForm.add(new JLabel("Adresse : "));
-		this.panelForm.add(this.txtAdresse);
-		
-		this.panelForm.add(new JLabel("Code postal : "));
-		this.panelForm.add(this.txtCp);
-	
-		this.panelForm.add(new JLabel("Ville : "));
-		this.panelForm.add(this.txtVille);
-		
-		this.panelForm.add(new JLabel("Email : "));
-		this.panelForm.add(this.txtMail);
-		
-		this.panelForm.add(new JLabel("Mot de passe : "));
-		this.panelForm.add(this.txtMdp);
-		
-		this.panelForm.add(new JLabel("Role : "));
-		this.panelForm.add(this.txtRole);
+		this.panelForm.add(new JLabel("Nom : "));
+		this.panelForm.add(this.txtId);
 		
 		this.panelForm.add(new JLabel("Departement : "));
-		this.panelForm.add(this.txtNumd);
+		this.panelForm.add(this.txtNumdepartement);
+		
+		this.panelForm.add(new JLabel("Poste : "));
+		this.panelForm.add(this.txtIdposte);
 		
 		this.panelForm.add(this.btAnnuler);
 		this.panelForm.add(this.btEnregistrer);
 		this.add(this.panelForm); 
 		
+		for (Secteur unSecteur : Modele.selectAllSecteurs(""))
+		{
+			this.txtIdsecteur.addItem(unSecteur.getIdsecteur()+"-"+unSecteur.getNoms());
+		}
+		for (Candidat unCandidat : Modele.selectAllCandidats(""))
+		{
+			this.txtId.addItem(unCandidat.getId()+"-"+unCandidat.getNom());
+		}
 		for (Departement unDepartement : Modele.selectAllDepartements(""))
 		{
-			this.txtNumd.addItem(unDepartement.getNumdepartement()+"-"+unDepartement.getNomdepartement());
+			this.txtNumdepartement.addItem(unDepartement.getNumdepartement()+"-"+unDepartement.getNomdepartement());
+		}
+		for (Poste unPoste : Modele.selectAllPostes(""))
+		{
+			this.txtIdposte.addItem(unPoste.getIdposte()+"-"+unPoste.getIntituleposte());
 		}
 		
 		
@@ -110,20 +115,16 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 		this.btAnnuler.addActionListener(this);
 		this.btEnregistrer.addActionListener(this);
 		this.btRechercher.addActionListener(this);
-		this.txtPrenom.addKeyListener(this);
-		this.txtNom.addKeyListener(this);
-		this.txtAdresse.addKeyListener(this);
-		this.txtCp.addKeyListener(this);
-		this.txtVille.addKeyListener(this);
-		this.txtMail.addKeyListener(this);
-		this.txtMdp.addKeyListener(this);
-		this.txtRole.addKeyListener(this);
-		this.txtNumd.addKeyListener(this);
+		this.txtIdsecteur.addKeyListener(this);
+		this.txtId.addKeyListener(this);
+		this.txtNumdepartement.addKeyListener(this);
+		this.txtIdposte.addKeyListener(this);
+		
 		
 		//=======================CONSTRUCTION DE LA TABLE==============================================
-		String entetes [] = {"Id","Prenom","Nom","Adresse","Code postal","Ville","Mail","Mot de passe","Role","ID dep"};
+		String entetes [] = {"Id Candidature","Secteur","Nom","Departement","Poste"};
 		
-		Object donnees [][] = this.getDonnees ("") ; //select tous les candidats  
+		Object donnees [][] = this.getDonnees ("") ; //select toutes les candidatures  
 		this.unTableau = new Tableau (entetes, donnees); 
 		
 		this.uneTable = new JTable(unTableau); 
@@ -156,26 +157,20 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 						int numLigne = uneTable.getSelectedRow(); 
 						if( nbClic == 2 )
 						{
-							int retour = JOptionPane.showConfirmDialog(null,  "Voulez-vous supprimer le client ?", 
-									"Suppression Candidat", JOptionPane.YES_NO_OPTION); 
+							int retour = JOptionPane.showConfirmDialog(null,  "Voulez-vous supprimer la candidature ?", 
+									"Suppression Candidature", JOptionPane.YES_NO_OPTION); 
 							if(retour ==0) {
 								int id = Integer.parseInt(unTableau.getValueAt(numLigne,0).toString()); 
-								//on supprime le candidat dans la base 
-								Modele.deleteCandidat(id);
+								//on supprime la candidature dans la base
+								
+								Modele.deleteCandidature(id);
+								
 								//on le supprime de l'affichage 
 								unTableau.supprimerLigne(numLigne);
 							}
 						}else if (nbClic==1)
 						{
-							txtPrenom.setText(unTableau.getValueAt(numLigne,1).toString());
-							txtNom.setText(unTableau.getValueAt(numLigne,2).toString());
-							txtAdresse.setText(unTableau.getValueAt(numLigne,3).toString());
-							txtCp.setText(unTableau.getValueAt(numLigne,4).toString());
-							txtVille.setText(unTableau.getValueAt(numLigne,5).toString());
-							txtMail.setText(unTableau.getValueAt(numLigne,6).toString());
-							txtMdp.setText(unTableau.getValueAt(numLigne,7).toString());
-							txtRole.setText(unTableau.getValueAt(numLigne,8).toString());
-							//txtNumd.setText(unTableau.getValueAt(numLigne,9).toString());
+							
 							btEnregistrer.setText("Modifier");
 						}
 					}
@@ -184,10 +179,11 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 				});
 				
 	}
-
+	// =========================================BLOCAGE ICI ===================================
+// =========================================BLOCAGE ICI ===================================
 			public Object [][] getDonnees (String mot)
 			{
-				ArrayList<Candidat> lesCandidats = Modele.selectAllCandidats(mot); 
+				ArrayList<Candidature> lesCandidatures = Modele.selectAllCandidatures(mot); 
 				Object [][] matrice = new Object [lesCandidats.size()][10]; 
 				int i=0; 
 				for (Candidat unCandidat : lesCandidats)
@@ -341,3 +337,4 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 
 
 }
+
