@@ -723,38 +723,148 @@ public class Modele {
 		}
 //=========================================SELECT WHERE SECTEUR=================================
 		
-				public static ArrayList<Secteur> selectAllSecteurs(String mot) {
-					 
-					ArrayList<Secteur> lesSecteurs = new ArrayList<Secteur>(); 
-					String requete ; 
-					if (mot.equals("") ) {
-						requete = "select * from secteur "; 
-					}
-					else {
-						requete= 
-								"select * from secteur where noms like '%"+mot+"' ;";  
-					}
+		// SELECTION DE TOUS LES SECTEURS
+		public static ArrayList<Secteur> selectAllSecteurs () {
+			ArrayList<Secteur> lesSecteurs = new ArrayList<Secteur>();
+			String requete = "SELECT * FROM secteur;";
+			try {
+				uneBdd.seConnecter();
+				Statement unStat = uneBdd.getMaConnexion().createStatement();
+				ResultSet desResultats = unStat.executeQuery(requete);
+				while (desResultats.next()) {
+					Secteur unSecteur = new Secteur (
+							desResultats.getInt("idsecteur"),
+							desResultats.getString("noms")
+							);
+					lesSecteurs.add(unSecteur);
+				}
+				unStat.close();
+				uneBdd.seDeconnecter();
+			} catch (SQLException exp) {
+				System.out.println("Erreur de requête : " + requete);
+			}
+			return lesSecteurs;
+		}
+		
+		//=========================================SELECT WHERE CANDIDAT=================================
+		
+				// SELECTION DE TOUS LES CANDIDATS
+				public static ArrayList<Candidat> selectAllCandidatss () {
+					ArrayList<Candidat> lesCandidats = new ArrayList<Candidat>();
+					String requete = "SELECT * FROM candidat;";
 					try {
 						uneBdd.seConnecter();
-						Statement unStat = uneBdd.getMaConnexion().createStatement(); //curseur 
-						ResultSet desResultats = unStat.executeQuery(requete); //fetchAll de PHP 
-						//parcours des résultats pour construire les instances des postes 
-						while (desResultats.next()) //tant qu'il y a un résultat suivant 
-						{
-							Secteur unSecteur = new Secteur (
-									desResultats.getInt("idsecteur"), desResultats.getString ("noms")
+						Statement unStat = uneBdd.getMaConnexion().createStatement();
+						ResultSet desResultats = unStat.executeQuery(requete);
+						while (desResultats.next()) {
+							Candidat unCandidat = new Candidat (
+									desResultats.getInt("id"), desResultats.getInt ("numd"),
+									desResultats.getString ("prenom"), 
+									desResultats.getString ("nom"), desResultats.getString ("adresse"),
+									desResultats.getString ("cp"), desResultats.getString ("ville"), desResultats.getString("mail")
+									, desResultats.getString ("mdp"), desResultats.getString ("role")
 									);
-							//On ajoute cet objet à la liste des secteurs 
-							lesSecteurs.add(unSecteur);
+							lesCandidats.add(unCandidat);
 						}
-						unStat.close(); 
+						unStat.close();
 						uneBdd.seDeconnecter();
+					} catch (SQLException exp) {
+						System.out.println("Erreur de requête : " + requete);
 					}
-					catch (SQLException exp)
-					{
-						System.out.println("Erreur execution requete : " + requete);
-					}
-					return lesSecteurs; 
+					return lesCandidats;
 				}
+
+//=========================================SELECT WHERE DEPARTEMENT=================================
+				
+// SELECTION DE TOUS LES DEPARTEMENTS
+		public static ArrayList<Departement> selectAllDepartementss () {
+			ArrayList<Departement> lesDepartements = new ArrayList<Departement>();
+			String requete = "SELECT * FROM departement;";
+			try {
+				uneBdd.seConnecter();
+				Statement unStat = uneBdd.getMaConnexion().createStatement();
+				ResultSet desResultats = unStat.executeQuery(requete);
+				while (desResultats.next()) {
+					Departement unDepartement = new Departement (
+						desResultats.getInt("numdepartement"), desResultats.getString("nomdepartement")
+						);
+					lesDepartements.add(unDepartement);
+				}
+			unStat.close();
+			uneBdd.seDeconnecter();
+			} catch (SQLException exp) {
+				System.out.println("Erreur de requête : " + requete);
+			}
+			return lesDepartements;
+		}
+		//=========================================SELECT WHERE POSTE=================================
+		
+		// SELECTION DE TOUS LES POSTES
+				public static ArrayList<Poste> selectAllPostess () {
+					ArrayList<Poste> lesPostes = new ArrayList<Poste>();
+					String requete = "SELECT * FROM poste;";
+					try {
+						uneBdd.seConnecter();
+						Statement unStat = uneBdd.getMaConnexion().createStatement();
+						ResultSet desResultats = unStat.executeQuery(requete);
+						while (desResultats.next()) {
+							Poste unPoste = new Poste (
+								desResultats.getInt("idposte"), desResultats.getInt("idsecteur"),
+								desResultats.getString("intituleposte"),
+								desResultats.getString("contratposte")
+								);
+							lesPostes.add(unPoste);
+						}
+					unStat.close();
+					uneBdd.seDeconnecter();
+					} catch (SQLException exp) {
+						System.out.println("Erreur de requête : " + requete);
+					}
+					return lesPostes;
+			
+				}
+				
+// SELECTION DE TOUS LES CANDIDATURES
+		public static ArrayList<Candidature> selectAllCandidaturess () {
+			ArrayList<Candidature> lesCandidatures = new ArrayList<Candidature>();
+			String requete = "SELECT * FROM candidature;";
+			try {
+				uneBdd.seConnecter();
+				Statement unStat = uneBdd.getMaConnexion().createStatement();
+				ResultSet desResultats = unStat.executeQuery(requete);
+				while (desResultats.next()) {
+					Candidature unCandidature = new Candidature (
+							desResultats.getInt("idcandidature"),
+							desResultats.getInt("idsecteur"),
+							desResultats.getInt("id"),
+							desResultats.getInt("numdepartement"),
+							desResultats.getInt("idposte")
+							);
+					lesCandidatures.add(unCandidature);
+				}
+				unStat.close();
+				uneBdd.seDeconnecter();
+			} catch (SQLException exp) {
+				System.out.println("Erreur de requête : " + requete);
+			}
+					return lesCandidatures;
+		}
+		// EDITION D'UN CANDIDATURE
+		public static void updateCandidature (Candidature uneCandidature) {
+			String requete = "UPDATE candidature SET idsecteur = '"
+					+ uneCandidature.getIdsecteur() + "', id = '" 
+					+ uneCandidature.getId() + "', numdepartement = '"
+					+ uneCandidature.getNumdepartement() + "', idposte = '"
+					+ uneCandidature.getIdposte() + "' WHERE id = "+uneCandidature.getId()+";";
+			try {
+				uneBdd.seConnecter();
+				Statement unStat = uneBdd.getMaConnexion().createStatement();
+				unStat.execute(requete);
+				unStat.close();
+				uneBdd.seDeconnecter();
+			} catch (SQLException exp) {
+				System.out.println("Erreur de requête : " + requete);
+			}
+		}
 }
 	

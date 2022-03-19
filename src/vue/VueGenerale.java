@@ -31,6 +31,7 @@ public class VueGenerale extends JFrame implements ActionListener {
 	
 		private PanelCandidat unPanelCandidats  = new PanelCandidat();
 		private PanelProfessionel unPanelProfessionels  = new PanelProfessionel();
+		private PanelCandidature unPanelCandidatures  = new PanelCandidature();
 	
 	
 	private JPanel panelMenu = new JPanel(); 
@@ -108,6 +109,7 @@ public class VueGenerale extends JFrame implements ActionListener {
 		  
 		 this.add(this.unPanelCandidats); 
 		 this.add(this.unPanelProfessionels);
+		 this.add(this.unPanelCandidatures);
 		 
 		this.setVisible(true);
 	}
@@ -130,6 +132,7 @@ public class VueGenerale extends JFrame implements ActionListener {
 		else if (e.getSource() == this.btCandidat)
 		{
 			this.unPanelProfessionels.setVisible(false);
+			this.unPanelCandidatures.setVisible(false);
 			this.unPanelCandidats.setVisible(true);
 			
 			
@@ -137,7 +140,14 @@ public class VueGenerale extends JFrame implements ActionListener {
 		else if(e.getSource() ==this.btProfessionel)
 		{
 			this.unPanelCandidats.setVisible(false);
+			this.unPanelCandidatures.setVisible(false);
 			this.unPanelProfessionels.setVisible(true);
+		}
+		else if(e.getSource() ==this.btCandidature)
+		{
+			this.unPanelCandidats.setVisible(false);
+			this.unPanelProfessionels.setVisible(false);
+			this.unPanelCandidatures.setVisible(true);
 		}
 			
 	}
