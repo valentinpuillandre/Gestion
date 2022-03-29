@@ -67,7 +67,7 @@ public class PanelCandidature extends PanelDeBase implements ActionListener {
 
 		// Construction du panel Table
 		this.panelTable.setBounds(345, 20, 400, 320);
-		this.panelTable.setBackground(Color.yellow);
+		this.panelTable.setBackground(Color.blue);
 		this.panelTable.setLayout(null);
 		
 		String entetes[] = { "Secteur", "Candidat", "Département", "Poste"};
@@ -160,12 +160,12 @@ public class PanelCandidature extends PanelDeBase implements ActionListener {
 		
 		ArrayList<Departement> lesDepartements = Modele.selectAllDepartementss();
 		for (Departement unDepartement : lesDepartements) {
-			this.cbxId.addItem(unDepartement.getNumdepartement()+"-"+unDepartement.getNomdepartement());
+			this.cbxNumdepartement.addItem(unDepartement.getNumdepartement()+"-"+unDepartement.getNomdepartement());
 		}
 		
 		ArrayList<Poste> lesPostes = Modele.selectAllPostess();
 		for (Poste unPoste : lesPostes) {
-			this.cbxId.addItem(unPoste.getIdposte()+"-"+unPoste.getIntituleposte());
+			this.cbxIdposte.addItem(unPoste.getIdposte()+"-"+unPoste.getIntituleposte());
 		}
 	}
 
