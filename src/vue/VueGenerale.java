@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -26,13 +27,15 @@ public class VueGenerale extends JFrame implements ActionListener {
 	private JButton btArchive = new JButton("Archives");
 	private JButton btBord = new JButton("T-Bord");
 	private JButton btQuitter = new JButton("Quitter");
-	
+	ImageIcon uneImage = new ImageIcon("src/image/logo.png");
+	JLabel logo = new JLabel(uneImage);
 	//instanciation des Panels 
 	
 		private PanelCandidat unPanelCandidats  = new PanelCandidat();
 		private PanelProfessionel unPanelProfessionels  = new PanelProfessionel();
 		private PanelCandidature unPanelCandidatures  = new PanelCandidature();
-	
+		private PanelStats unPanelStats  = new PanelStats();
+		private PanelArchive unPanelArchives  = new PanelArchive();
 	
 	private JPanel panelMenu = new JPanel(); 
 	private JPanel panelProfil = new JPanel();
@@ -44,7 +47,11 @@ public class VueGenerale extends JFrame implements ActionListener {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//fermeture
 		this.setBounds(200,100,900,550); //position et hauteur/largeur
 		this.setLayout(null);
+		logo.setBounds(0,80,900,400);
+		this.add(logo);
 		this.getContentPane().setBackground(Color.BLACK);//couleur de fond de la page
+		
+		
 		this.setResizable(false);//impossible à agrandir ou rétrecir 
 		
 		//=======================================COULEUR DU TEXTE===============================
@@ -110,6 +117,8 @@ public class VueGenerale extends JFrame implements ActionListener {
 		 this.add(this.unPanelCandidats); 
 		 this.add(this.unPanelProfessionels);
 		 this.add(this.unPanelCandidatures);
+		 this.add(this.unPanelStats);
+		 this.add(this.unPanelArchives);
 		 
 		this.setVisible(true);
 	}
@@ -134,6 +143,9 @@ public class VueGenerale extends JFrame implements ActionListener {
 			this.unPanelProfessionels.setVisible(false);
 			this.unPanelCandidatures.setVisible(false);
 			this.unPanelCandidats.setVisible(true);
+			this.unPanelStats.setVisible(false);
+			this.logo.setVisible(false);
+			this.unPanelArchives.setVisible(false);
 			
 			
 		}
@@ -142,12 +154,36 @@ public class VueGenerale extends JFrame implements ActionListener {
 			this.unPanelCandidats.setVisible(false);
 			this.unPanelCandidatures.setVisible(false);
 			this.unPanelProfessionels.setVisible(true);
+			this.unPanelStats.setVisible(false);
+			this.logo.setVisible(false);
+			this.unPanelArchives.setVisible(false);
 		}
 		else if(e.getSource() ==this.btCandidature)
 		{
 			this.unPanelCandidats.setVisible(false);
 			this.unPanelProfessionels.setVisible(false);
 			this.unPanelCandidatures.setVisible(true);
+			this.unPanelStats.setVisible(false);
+			this.logo.setVisible(false);
+			this.unPanelArchives.setVisible(false);
+		}
+		else if(e.getSource() ==this.btBord)
+		{
+			this.unPanelCandidats.setVisible(false);
+			this.unPanelProfessionels.setVisible(false);
+			this.unPanelCandidatures.setVisible(false);
+			this.unPanelStats.setVisible(true);
+			this.logo.setVisible(false);
+			this.unPanelArchives.setVisible(false);
+		}
+		else if(e.getSource() ==this.btArchive)
+		{
+			this.unPanelCandidats.setVisible(false);
+			this.unPanelProfessionels.setVisible(false);
+			this.unPanelCandidatures.setVisible(false);
+			this.unPanelStats.setVisible(false);
+			this.logo.setVisible(false);
+			this.unPanelArchives.setVisible(true);
 		}
 			
 	}

@@ -1,6 +1,7 @@
 package vue;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,7 +30,7 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 	private JPanel panelForm = new JPanel(); 
 	private JButton btAnnuler = new JButton("Annuler"); 
 	private JButton btEnregistrer = new JButton("Enregistrer"); 
-	
+	private JLabel titre = new JLabel("Gestion des candidatures");
 	
 	private JTextField txtPrenom = new JTextField();
 	private JTextField txtNom = new JTextField();
@@ -47,6 +48,7 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 	private Tableau unTableau ; 
 	
 	private JPanel panelRechercher = new JPanel(); 
+	private JPanel panelTitre = new JPanel(); 
 	private JTextField txtMot = new JTextField();
 	private JButton btRechercher = new JButton("Rechercher");
 	
@@ -96,7 +98,7 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 			this.txtNumd.addItem(unDepartement.getNumdepartement()+"-"+unDepartement.getNomdepartement());
 		}
 		
-		
+	
 		//============================CONSTRUCTION DU PANEL DE RECHERCHE============================= 
 		this.panelRechercher.setLayout(new GridLayout(1,3));
 		this.panelRechercher.setBounds(300, 40, 460, 20);
@@ -104,7 +106,17 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 		this.panelRechercher.add(new JLabel("Filtrer les candidats : "));
 		this.panelRechercher.add(this.txtMot); 
 		this.panelRechercher.add(this.btRechercher); 
+		
 		this.add(this.panelRechercher); 
+		//=============================================================================
+		this.panelTitre.setLayout(new GridLayout(1,1));
+		
+		this.panelTitre.setBounds(400, 10, 150, 30);
+		this.panelTitre.setBackground(new Color(84, 140, 168));
+		this.panelTitre.setFont(new Font("Lucida",30,18));
+		this.panelTitre.setForeground(Color.white);
+		this.panelTitre.add(new JLabel("Gestion des candidats"));
+		this.add(this.panelTitre); 
 		
 		//===========================RENDRE LES BOUTONS CLIQUABLES==================================== 
 		this.btAnnuler.addActionListener(this);

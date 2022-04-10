@@ -1,6 +1,7 @@
 package vue;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -49,7 +50,7 @@ public class PanelProfessionel extends PanelDeBase implements ActionListener, Ke
 	private JTable uneTable ; 
 	private JScrollPane uneScroll ; 
 	private Tableau unTableau ; 
-	
+	private JPanel panelTitre = new JPanel();
 	private JPanel panelRechercher = new JPanel(); 
 	private JTextField txtMot = new JTextField();
 	private JButton btRechercher = new JButton("Rechercher");
@@ -57,7 +58,7 @@ public class PanelProfessionel extends PanelDeBase implements ActionListener, Ke
 	
 	
 	public PanelProfessionel() {
-		super(new Color(13, 28, 74));
+		super(new Color(84, 140, 168));
 		
 		//=================================CONSTRUCTION DU PANEL FORM===============================
 		this.panelForm.setLayout(new GridLayout(10,1));
@@ -65,7 +66,7 @@ public class PanelProfessionel extends PanelDeBase implements ActionListener, Ke
 		this.panelForm.setBackground(Color.gray);
 		
 		
-		this.panelForm.add(new JLabel("Nom Professionel : "));
+		this.panelForm.add(new JLabel("Nom Professionnel : "));
 		this.panelForm.add(this.txtNom);
 		
 		this.panelForm.add(new JLabel("Adresse : "));
@@ -100,11 +101,19 @@ public class PanelProfessionel extends PanelDeBase implements ActionListener, Ke
 		this.panelRechercher.setLayout(new GridLayout(1,3));
 		this.panelRechercher.setBounds(300, 40, 460, 20);
 		this.panelRechercher.setBackground(Color.gray);
-		this.panelRechercher.add(new JLabel("Filtrer les professionels : "));
+		this.panelRechercher.add(new JLabel("Filtrer les professionnels : "));
 		this.panelRechercher.add(this.txtMot); 
 		this.panelRechercher.add(this.btRechercher); 
 		this.add(this.panelRechercher); 
-		
+		//=============================================================================
+				this.panelTitre.setLayout(new GridLayout(1,1));
+				
+				this.panelTitre.setBounds(400, 10, 200, 20);
+				this.panelTitre.setBackground(new Color(84, 140, 168));
+				this.panelTitre.setFont(new Font("Lucida",30,18));
+				
+				this.panelTitre.add(new JLabel("Gestion des professionnels"));
+				this.add(this.panelTitre); 
 		//===========================RENDRE LES BOUTONS CLIQUABLES==================================== 
 		this.btAnnuler.addActionListener(this);
 		this.btEnregistrer.addActionListener(this);
@@ -155,8 +164,8 @@ public class PanelProfessionel extends PanelDeBase implements ActionListener, Ke
 						int numLigne = uneTable.getSelectedRow(); 
 						if( nbClic == 2 )
 						{
-							int retour = JOptionPane.showConfirmDialog(null,  "Voulez-vous supprimer le professionel ?", 
-									"Suppression Professionel", JOptionPane.YES_NO_OPTION); 
+							int retour = JOptionPane.showConfirmDialog(null,  "Voulez-vous supprimer le professionnel ?", 
+									"Suppression Professionnel", JOptionPane.YES_NO_OPTION); 
 							if(retour ==0) {
 								int id = Integer.parseInt(unTableau.getValueAt(numLigne,0).toString()); 
 								//on supprime le professionel dans la base 

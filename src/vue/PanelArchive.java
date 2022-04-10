@@ -9,22 +9,25 @@ import javax.swing.*;
 import controleur.Poste;
 import controleur.Secteur;
 import controleur.Tableau;
+import controleur.Archive;
 import controleur.Candidat;
-import controleur.Candidature;
 import controleur.Departement;
 
 import modele.Modele;
 
-public class PanelCandidature extends PanelDeBase implements ActionListener {
+public class PanelArchive extends PanelDeBase implements ActionListener {
 
-	public PanelCandidature(Color uneCouleur) {
+	public PanelArchive(Color uneCouleur) {
 		super(uneCouleur);
 		// TODO Auto-generated constructor stub
 	}
 
+	
+
 	private JPanel panelForm = new JPanel();
 	private JPanel panelTable = new JPanel();
-	
+	private JLabel titre = new JLabel("Les candidatures archivées");
+	private JPanel panelTitre = new JPanel(); 
 	private JButton btEnregistrer = new JButton("Enregistrer");
 	private JButton btAnnuler = new JButton("Annuler");
 	
@@ -38,37 +41,27 @@ public class PanelCandidature extends PanelDeBase implements ActionListener {
 	private JTable uneTable = null;
 
 	private static Tableau unTableau = null;
+	
 
-	public PanelCandidature() {
+	public PanelArchive() {
 		super(new Color(84, 140, 168));
 
-		this.panelForm.setLayout(new GridLayout(5, 2));
-
-
-		this.panelForm.add(new JLabel("Secteur  : "));
-		this.panelForm.add(this.cbxIdsecteur);
-
-		this.panelForm.add(new JLabel("Candidat: "));
-		this.panelForm.add(this.cbxId);
-
-		this.panelForm.add(new JLabel("Département : "));
-		this.panelForm.add(this.cbxNumdepartement);
 		
-		this.panelForm.add(new JLabel("Poste : "));
-		this.panelForm.add(this.cbxIdposte);
-
-		this.panelForm.add(this.btAnnuler);
-		this.panelForm.add(this.btEnregistrer);
-
-		// this.panelForm.setBackground(Color.gray);
-
-		this.panelForm.setBounds(40, 20, 300, 300);
-		this.add(this.panelForm);
 
 		// Construction du panel Table
-		this.panelTable.setBounds(345, 20, 400, 300);
-		this.panelTable.setBackground(new Color(1, 13, 107));
+		this.panelTable.setBounds(200, 40, 400, 300);
+		this.panelTable.setBackground(new Color(84, 140, 168));
 		this.panelTable.setLayout(null);
+		
+		//=============================================================================
+				this.panelTitre.setLayout(new GridLayout(1,1));
+				
+				this.panelTitre.setBounds(330, 10, 150, 30);
+				this.panelTitre.setBackground(new Color(84, 140, 168));
+				this.panelTitre.setFont(new Font("Lucida",30,18));
+				this.panelTitre.setForeground(Color.white);
+				this.panelTitre.add(new JLabel("Candidatures archivées"));
+				this.add(this.panelTitre); 
 		
 		String entetes[] = { "Secteur", "Candidat", "Département", "Poste"};
 		Object donnees[][] = this.getLesDonnees();
@@ -111,10 +104,10 @@ public class PanelCandidature extends PanelDeBase implements ActionListener {
 				int nbclic = e.getClickCount();
 				if (nbclic == 2) {
 					int numLigne = uneTable.getSelectedRow();
-					int retour = JOptionPane.showConfirmDialog(null, "Voulez-vous supprimer cette candidature ?", "Suppression d'une candidature", JOptionPane.YES_NO_OPTION);
+					int retour = JOptionPane.showConfirmDialog(null, "Voulez-vous supprimer cette archive ?", "Suppression d'une archive", JOptionPane.YES_NO_OPTION);
 					if (retour == 0) {
 						int idcandidature = Integer.parseInt(unTableau.getValueAt(numLigne, 0).toString());
-						Modele.deleteCandidature(idcandidature);
+						Modele.deleteArchive(idcandidature);
 						unTableau.supprimerLigne(numLigne);
 						viderChamps();
 					}
@@ -170,15 +163,15 @@ public class PanelCandidature extends PanelDeBase implements ActionListener {
 	}
 
 	public Object[][] getLesDonnees() {
-		ArrayList<Candidature> lesCandidatures = Modele.selectAllCandidaturess();
-		Object[][] matrice = new Object[lesCandidatures.size()][5];
+		ArrayList<Archive> lesArchives = Modele.selectAllArchives();
+		Object[][] matrice = new Object[lesArchives.size()][5];
 		int i = 0;
-		for (Candidature unCandidature : lesCandidatures) {
-			matrice[i][0] = unCandidature.getIdcandidature();
-			matrice[i][1] = unCandidature.getIdsecteur();
-			matrice[i][2] = unCandidature.getId();
-			matrice[i][3] = unCandidature.getNumdepartement();
-			matrice[i][4] = unCandidature.getIdposte();
+		for (Archive uneArchive : lesArchives) {
+			matrice[i][0] = uneArchive.getIdcandidature();
+			matrice[i][1] = uneArchive.getIdsecteur();
+			matrice[i][2] = uneArchive.getId();
+			matrice[i][3] = uneArchive.getNumdepartement();
+			matrice[i][4] = uneArchive.getIdposte();
 			i++;
 		}
 		return matrice;
@@ -189,8 +182,8 @@ public class PanelCandidature extends PanelDeBase implements ActionListener {
 		this.btEnregistrer.setText("Enregistrer");
 	}
 	
-	public Candidature saisirCandidature() {
-		Candidature uneCandidature = null;
+	public Archive saisirArchive() {
+		Archive uneArchive = null;
 		
 		
 		String tab[] = this.cbxIdsecteur.getSelectedItem().toString().split("-");
@@ -206,7 +199,7 @@ public class PanelCandidature extends PanelDeBase implements ActionListener {
 		int idposte = Integer.parseInt(tab[0]);
 		
 		
-		return uneCandidature;
+		return uneArchive;
 	
 	}
 
@@ -214,33 +207,11 @@ public class PanelCandidature extends PanelDeBase implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == this.btAnnuler) {
 			this.viderChamps();
-		} else if (e.getSource() == this.btEnregistrer && e.getActionCommand().equalsIgnoreCase("Enregistrer")) {
-			Candidature uneCandidature = this.saisirCandidature();
-			Modele.insertCandidature(uneCandidature);
+		} 
 			
 			
 	
-			// Mettre à jour l'affichage
-			Object ligne[] = { uneCandidature.getIdcandidature(), uneCandidature.getIdsecteur(), uneCandidature.getId(), uneCandidature.getNumdepartement(),
-				uneCandidature.getIdposte() };
-			unTableau.ajouterLigne(ligne);
-
-			JOptionPane.showMessageDialog(this, "Insertion de la candidature réussie !");
-			unTableau.fireTableDataChanged();
-			this.viderChamps();
-		} else if(e.getSource() == this.btEnregistrer && e.getActionCommand().equalsIgnoreCase("Modifier")) {
-			Candidature uneCandidature = this.saisirCandidature();
-			int numLigne = this.uneTable.getSelectedRow();
-			int idcandidature = Integer.parseInt(unTableau.getValueAt(numLigne, 0).toString());
-			uneCandidature.setIdcandidature(idcandidature);
-			Modele.updateCandidature(uneCandidature);
-			JOptionPane.showMessageDialog(this, "Modification effectuée !");
-			Object ligne[] = { uneCandidature.getIdcandidature(), uneCandidature.getIdsecteur(), uneCandidature.getId(), uneCandidature.getNumdepartement(),
-					uneCandidature.getIdposte() };
-			unTableau.modifierLigne(numLigne, ligne);
-			this.viderChamps();
-			this.btEnregistrer.setText("Enregistrer");
-		}
+	
 	}
 
 }

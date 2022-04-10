@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import controleur.Archive;
 import controleur.Candidat;
 import controleur.Candidature;
 import controleur.Departement;
@@ -239,6 +240,28 @@ public class Modele {
 		}
 		
 	}
+	//=======================================COUNT CANDIDAT=========================================
+	
+	public static int countCandidats () {
+		int nbvols = 0;
+		String requete = "SELECT count(*) as nb FROM candidat;";
+		try {
+			uneBdd.seConnecter();
+			Statement unStat = uneBdd.getMaConnexion().createStatement();
+			ResultSet unResultat = unStat.executeQuery(requete);
+			if (unResultat.next()) {
+				nbvols = unResultat.getInt("nb");
+			}
+			unStat.close();
+			uneBdd.seDeconnecter();
+		} catch (SQLException exp) {
+			System.out.println("Erreur de requete : " + requete);
+		}
+		return nbvols;
+	}
+	
+
+	
 	//==============================================================================================
 	/********************************** GESTION DES DEPARTEMENTS ***********************************/
 	//==================================INSERTION D'UN DEPARTEMENT AU CAS OU========================
@@ -551,14 +574,35 @@ public class Modele {
 			}
 			return unProfessionel; 
 		}
+		
+		//=======================================COUNT PROFESSIONNELS=========================================
+		
+		public static int countProfessionels() {
+			int nbvols = 0;
+			String requete = "SELECT count(*) as nb FROM professionels;";
+			try {
+				uneBdd.seConnecter();
+				Statement unStat = uneBdd.getMaConnexion().createStatement();
+				ResultSet unResultat = unStat.executeQuery(requete);
+				if (unResultat.next()) {
+					nbvols = unResultat.getInt("nb");
+				}
+				unStat.close();
+				uneBdd.seDeconnecter();
+			} catch (SQLException exp) {
+				System.out.println("Erreur de requete : " + requete);
+			}
+			return nbvols;
+		}
 		//==================================CANDIDATURE=======================================
 		/********************************** GESTION DES CANDIDATURES ***********************************/
 		public static void insertCandidature(Candidature uneCandidature)
 		{
-			String requete = "insert into candidature values (null, '" + uneCandidature.getIdsecteur()
-			+ "','" + uneCandidature.getId()+"','"+uneCandidature.getNumdepartement()+ "','"
-			+ uneCandidature.getIdposte()+"');";
-			
+			String requete = "INSERT INTO candidature VALUES (null, '"
+					+ uneCandidature.getIdsecteur() + "', '" 
+					+ uneCandidature.getId() + "', '"
+					+ uneCandidature.getNumdepartement() + "', '"
+					+ uneCandidature.getIdposte() + "');";
 			try {
 				uneBdd.seConnecter();
 				Statement unStat = uneBdd.getMaConnexion().createStatement(); //curseur 
@@ -684,6 +728,71 @@ public class Modele {
 			}
 			
 		}
+		public static int countCandidatures() {
+			int nbvols = 0;
+			String requete = "SELECT count(*) as nb FROM candidature;";
+			try {
+				uneBdd.seConnecter();
+				Statement unStat = uneBdd.getMaConnexion().createStatement();
+				ResultSet unResultat = unStat.executeQuery(requete);
+				if (unResultat.next()) {
+					nbvols = unResultat.getInt("nb");
+				}
+				unStat.close();
+				uneBdd.seDeconnecter();
+			} catch (SQLException exp) {
+				System.out.println("Erreur de requete : " + requete);
+			}
+			return nbvols;
+		}
+//=================================================GESTION ARCHIVE=========================================
+//===========================================================================================================
+//====================================SUPPRIMER UNE ARCHIVE======================================
+public static void deleteArchive(int idcandidature) {
+String requete = "delete from archivecandidature where idcandidature = " + idcandidature +";" ;
+					
+	try {
+		uneBdd.seConnecter();
+		Statement unStat = uneBdd.getMaConnexion().createStatement(); //curseur 
+		unStat.execute(requete);
+		unStat.close(); 
+		uneBdd.seDeconnecter();
+		}
+		catch (SQLException exp)
+		{
+			System.out.println("Erreur execution requete : " + requete);
+		}
+			
+		}
+
+//====================================SELECT ALL ARCHIVE===============================================
+//SELECTION DE TOUS LES CANDIDATURES
+		public static ArrayList<Archive> selectAllArchives () {
+			ArrayList<Archive> lesArchives = new ArrayList<Archive>();
+			String requete = "SELECT * FROM archivecandidature;";
+			try {
+				uneBdd.seConnecter();
+				Statement unStat = uneBdd.getMaConnexion().createStatement();
+				ResultSet desResultats = unStat.executeQuery(requete);
+				while (desResultats.next()) {
+					Archive uneArchive = new Archive (
+							desResultats.getInt("idcandidature"),
+							desResultats.getInt("idsecteur"),
+							desResultats.getInt("id"),
+							desResultats.getInt("numdepartement"),
+							desResultats.getInt("idposte")
+							);
+					lesArchives.add(uneArchive);
+				}
+				unStat.close();
+				uneBdd.seDeconnecter();
+			} catch (SQLException exp) {
+				System.out.println("Erreur de requête : " + requete);
+			}
+					return lesArchives;
+		}
+//================================================================================================
+//=================================================================================================
 		//=========================================SELECTWHERE POSTE===========================
 		public static ArrayList<Poste> selectAllPostes(String mot) {
 			 
@@ -865,6 +974,24 @@ public class Modele {
 			} catch (SQLException exp) {
 				System.out.println("Erreur de requête : " + requete);
 			}
+		}
+		//=====================================COUNT ARCHIVE==========================================
+		public static int countArchives() {
+			int nbvols = 0;
+			String requete = "SELECT count(*) as nb FROM archivecandidature;";
+			try {
+				uneBdd.seConnecter();
+				Statement unStat = uneBdd.getMaConnexion().createStatement();
+				ResultSet unResultat = unStat.executeQuery(requete);
+				if (unResultat.next()) {
+					nbvols = unResultat.getInt("nb");
+				}
+				unStat.close();
+				uneBdd.seDeconnecter();
+			} catch (SQLException exp) {
+				System.out.println("Erreur de requete : " + requete);
+			}
+			return nbvols;
 		}
 }
 	
