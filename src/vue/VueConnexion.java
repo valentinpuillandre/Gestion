@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+
 import controleur.PPE_Valentin;
 import controleur.User;
 import modele.Modele;
@@ -28,7 +29,7 @@ public class VueConnexion extends JFrame implements ActionListener, KeyListener{
 	private JTextField txtEmail = new JTextField();
 	private JPasswordField txtMdp = new JPasswordField();
 	private JButton btAnnuler = new JButton("Annuler");
-	private JButton btConnexion = new JButton("Connexion");
+	private JButton btConnexion = new JButton("Se connecter");
 	public VueConnexion()
 	{
 		this.setTitle("KANYU");
@@ -39,20 +40,27 @@ public class VueConnexion extends JFrame implements ActionListener, KeyListener{
 		this.setResizable(false);
 		
 		//construction du pannelConnexion
-		this.panelConnexion.setLayout(new GridLayout(3,2));
+		this.panelConnexion.setLayout(new GridLayout(2,2,3,3));
 		this.panelConnexion.setBounds(300,0,500,299);
-		this.panelConnexion.setBackground(Color.gray);
+		this.panelConnexion.setBackground(Color.white);
 		
 		//this.panelConnexion.setBorder(BorderFactory.createLineBorder(new Color(42,43,40)));
-		this.panelConnexion.add(new JLabel("Email :"));
+		Font uneFonte = new Font("Lucida",10,30);
+		//JLabel lbEmail = new JLabel("\t\t\t Email "); 
+		//lbEmail.setFont(uneFonte);
+		//this.panelConnexion.add(lbEmail);
+		
+		//JLabel lbmdp = new JLabel("\t\t\t Mot de passe  ");
+		//lbmdp.setFont(uneFonte);
+		//this.panelConnexion.add(lbmdp);
 		
 		this.panelConnexion.add(this.txtEmail);
-		this.panelConnexion.add(new JLabel("Mot de passe :"));
+		//this.panelConnexion.add(new JLabel("Mot de passe :"));
 		this.panelConnexion.add(this.txtMdp);
 		this.panelConnexion.add(this.btAnnuler);
 		
-		this.txtMdp.setFont(new Font("Lucida",30,18));
-		this.txtEmail.setFont(new Font("Lucida",30,18));
+		this.txtMdp.setFont(uneFonte);
+		this.txtEmail.setFont(uneFonte);
 		this.btConnexion.setForeground(Color.white);
 		this.btAnnuler.setForeground(Color.white);
 		this.btConnexion.setFont(new Font("Lucida",30,23));
@@ -75,6 +83,8 @@ public class VueConnexion extends JFrame implements ActionListener, KeyListener{
 		//rendre les zones de textes écoutables 
 		this.txtEmail.addKeyListener(this);
 		this.txtMdp.addKeyListener(this);
+		
+	
 		
 		
 		this.setVisible(true);
@@ -99,6 +109,9 @@ public void traitement()
 	String mail = this.txtEmail.getText();
 	String mdp = new String (this.txtMdp.getPassword());
 	
+	 //cryptage de mot de passe
+	 mdp = PPE_Valentin.getCrypteMDP(mdp);
+	 
 	//on vérifie dans la bdd : modele
 	User unUser = Modele.selectWhereUser(mail, mdp);
 	if(unUser == null)

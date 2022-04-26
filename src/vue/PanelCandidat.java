@@ -41,6 +41,7 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 	private JTextField txtMdp = new JTextField();
 	private JTextField txtRole = new JTextField();
 	private JComboBox<String> txtNumd = new JComboBox<String>();
+	private JTextField txtCommentaire = new JTextField();
 	
 	
 	private JTable uneTable ; 
@@ -58,9 +59,9 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 		super(new Color(84, 140, 168));
 		
 		//=================================CONSTRUCTION DU PANEL FORM===============================
-		this.panelForm.setLayout(new GridLayout(10,1));
+		this.panelForm.setLayout(new GridLayout(11,1));
 		this.panelForm.setBounds(10,20, 270, 340);
-		this.panelForm.setBackground(Color.gray);
+		this.panelForm.setBackground(new Color(84, 140, 168));
 		
 		this.panelForm.add(new JLabel("Prénom Candidat : "));
 		this.panelForm.add(this.txtPrenom);
@@ -89,6 +90,9 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 		this.panelForm.add(new JLabel("Departement : "));
 		this.panelForm.add(this.txtNumd);
 		
+		this.panelForm.add(new JLabel("Description : "));
+		this.panelForm.add(this.txtCommentaire);
+		
 		this.panelForm.add(this.btAnnuler);
 		this.panelForm.add(this.btEnregistrer);
 		this.add(this.panelForm); 
@@ -102,7 +106,7 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 		//============================CONSTRUCTION DU PANEL DE RECHERCHE============================= 
 		this.panelRechercher.setLayout(new GridLayout(1,3));
 		this.panelRechercher.setBounds(300, 40, 460, 20);
-		this.panelRechercher.setBackground(Color.gray);
+		this.panelRechercher.setBackground(new Color(84, 140, 168));
 		this.panelRechercher.add(new JLabel("Filtrer les candidats : "));
 		this.panelRechercher.add(this.txtMot); 
 		this.panelRechercher.add(this.btRechercher); 
@@ -131,9 +135,10 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 		this.txtMdp.addKeyListener(this);
 		this.txtRole.addKeyListener(this);
 		this.txtNumd.addKeyListener(this);
+		this.txtCommentaire.addKeyListener(this);
 		
 		//=======================CONSTRUCTION DE LA TABLE==============================================
-		String entetes [] = {"Id","Prenom","Nom","Adresse","Code postal","Ville","Mail","Mot de passe","Role","ID dep"};
+		String entetes [] = {"Id","Prenom","Nom","Adresse","Code postal","Ville","Mail","Mot de passe","Role","ID dep","Commentaire"};
 		
 		Object donnees [][] = this.getDonnees ("") ; //select tous les candidats  
 		this.unTableau = new Tableau (entetes, donnees); 
@@ -141,6 +146,7 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 		this.uneTable = new JTable(unTableau); 
 		this.uneScroll = new JScrollPane(this.uneTable); 
 		this.uneScroll.setBounds(290, 80, 500, 280);
+		
 		this.add(this.uneScroll);
 		
 		//gestion de la suppression / modification 
@@ -187,6 +193,8 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 							txtMail.setText(unTableau.getValueAt(numLigne,6).toString());
 							txtMdp.setText(unTableau.getValueAt(numLigne,7).toString());
 							txtRole.setText(unTableau.getValueAt(numLigne,8).toString());
+							
+							
 							//txtNumd.setText(unTableau.getValueAt(numLigne,9).toString());
 							btEnregistrer.setText("Modifier");
 						}
@@ -200,7 +208,7 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 			public Object [][] getDonnees (String mot)
 			{
 				ArrayList<Candidat> lesCandidats = Modele.selectAllCandidats(mot); 
-				Object [][] matrice = new Object [lesCandidats.size()][10]; 
+				Object [][] matrice = new Object [lesCandidats.size()][11]; 
 				int i=0; 
 				for (Candidat unCandidat : lesCandidats)
 				{
@@ -214,6 +222,7 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 					matrice[i][7] = unCandidat.getMdp();
 					matrice[i][8] = unCandidat.getRole();
 					matrice[i][9] = unCandidat.getNumd();
+					matrice[i][10] = unCandidat.getCommentaire();
 					i++; 
 				}
 				return matrice ; 
@@ -248,6 +257,7 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 				this.txtVille.setText("");
 				this.txtMail.setText("");
 				this.txtMdp.setText("");
+				this.txtCommentaire.setText("");
 				
 				this.btEnregistrer.setText("Enregistrer");
 				
@@ -258,6 +268,7 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 				this.txtVille.setBackground(Color.white);
 				this.txtMail.setBackground(Color.white);
 				this.txtMdp.setBackground(Color.white);
+				this.txtCommentaire.setBackground(Color.white);
 			}
 			
 			public void traitement (int choix)
@@ -270,6 +281,7 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 				String mail = this.txtMail.getText(); 
 				String mdp = this.txtMdp.getText();
 				String role = this.txtRole.getText();
+				String commentaire = this.txtCommentaire.getText();
 				String chaine = this.txtNumd.getSelectedItem().toString(); 
 				String tab [] = chaine.split("-");
 				int numd = Integer.parseInt(tab[0]);  
@@ -295,7 +307,7 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 				}
 				else { if (choix == 0) {
 								//instancier la classe Candidat 
-								Candidat unCandidat = new Candidat(0,numd, prenom, nom, adresse, cp, ville,mail,mdp,role); 
+								Candidat unCandidat = new Candidat(0,numd, prenom, nom, adresse, cp, ville,mail,mdp,role,commentaire); 
 								
 								//Insertion dans la BDD 
 								Modele.insertCandidat(unCandidat);
@@ -308,20 +320,20 @@ public class PanelCandidat extends PanelDeBase implements ActionListener, KeyLis
 								Object ligne[] ={unCandidat.getId(), unCandidat.getPrenom(), 
 										unCandidat.getNom(), unCandidat.getAdresse(),unCandidat.getCp(),unCandidat.getVille(),
 										 unCandidat.getMail(),unCandidat.getMdp(),unCandidat.getRole(),
-										 unCandidat.getNumd()}; 
+										 unCandidat.getNumd(), unCandidat.getCommentaire()}; 
 								
 								this.unTableau.ajouterLigne(ligne);
 				}else {
 					int numLigne = this.uneTable.getSelectedRow(); 
 					int id = Integer.parseInt(this.unTableau.getValueAt(numLigne, 0).toString()); 
-					Candidat unCandidat = new Candidat(id,numd, prenom,nom, adresse, cp,ville,mail,mdp,role);
+					Candidat unCandidat = new Candidat(id,numd, prenom,nom, adresse, cp,ville,mail,mdp,role,commentaire);
 					//update dans la base de données
 					Modele.updateCandidat(unCandidat);
 					//update dans le tableau d'affichage 
 					Object ligne[] ={unCandidat.getId(), unCandidat.getPrenom(), 
 							unCandidat.getNom(), unCandidat.getAdresse(),unCandidat.getCp(),unCandidat.getVille(),
 							 unCandidat.getMail(),unCandidat.getMdp(),unCandidat.getRole(),
-							 unCandidat.getNumd()}; 
+							 unCandidat.getNumd(),unCandidat.getCommentaire()}; 
 					this.unTableau.modifierLigne (numLigne, ligne); 
 				}
 				

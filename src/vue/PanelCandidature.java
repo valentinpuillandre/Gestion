@@ -205,6 +205,7 @@ public class PanelCandidature extends PanelDeBase implements ActionListener {
 		tab = this.cbxIdposte.getSelectedItem().toString().split("-");
 		int idposte = Integer.parseInt(tab[0]);
 		
+		uneCandidature = new Candidature(id, idsecteur, id, numdepartement, idposte);
 		
 		return uneCandidature;
 	

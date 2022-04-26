@@ -2,9 +2,9 @@ package controleur;
 
 public class Candidat {
 	private int id,numd;
-	private String prenom,nom,adresse,cp,ville,mail,mdp,role;
+	private String prenom,nom,adresse,cp,ville,mail,mdp,role,commentaire;
 	public Candidat(int id, int numd, String prenom, String nom, String adresse, String cp, String ville, String mail,
-			String mdp,String role) {
+			String mdp,String role, String commentaire) {
 		super();
 		this.id = id;
 		this.numd = numd;
@@ -16,7 +16,9 @@ public class Candidat {
 		this.mail = mail;
 		this.mdp = mdp;
 		this.role = role;
+		this.commentaire = commentaire;
 	}
+	
 	public int getId() {
 		return id;
 	}
@@ -77,7 +79,12 @@ public class Candidat {
 	public void setRole(String role) {
 		this.role = role;
 	}
-	
+	public String getCommentaire() {
+		return commentaire;
+	}
+	public void setCommentaire(String commentaire) {
+		this.commentaire = commentaire;
+	}
 	
 	
 }

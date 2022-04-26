@@ -21,12 +21,12 @@ import controleur.User;
 public class VueGenerale extends JFrame implements ActionListener {
 	
 	//=============INITIALISATION DES BOUTTONS==================
-	private JButton btProfessionel = new JButton("Professionel");
+	private JButton btProfessionel = new JButton("Professionnel");
 	private JButton btCandidat = new JButton("Candidat");
 	private JButton btCandidature = new JButton("Candidatures");
 	private JButton btArchive = new JButton("Archives");
-	private JButton btBord = new JButton("T-Bord");
-	private JButton btQuitter = new JButton("Quitter");
+	private JButton btBord = new JButton("Statistiques");
+	private JButton btQuitter = new JButton("Déconnexion");
 	ImageIcon uneImage = new ImageIcon("src/image/logo.png");
 	JLabel logo = new JLabel(uneImage);
 	//instanciation des Panels 
@@ -79,17 +79,17 @@ public class VueGenerale extends JFrame implements ActionListener {
 		this.btBord.setBackground(new Color(84, 140, 168));
 		
 		//======================================BORDURE DES BOUTTONS==============================
-	    //this.btBord.setBorder(BorderFactory.createLineBorder(new Color(0,0,0)));
+	    this.btBord.setBorder(BorderFactory.createLineBorder(new Color(0,0,0)));
 		
 		
 		//===========================CONSTRUCTION DU PANEL MENU===================================
 		this.panelMenu.setLayout(new GridLayout(1,7,5,5));
-		this.panelMenu.setBounds(50, 20, 800, 30);
+		this.panelMenu.setBounds(50, 20, 800, 35);
 		this.panelMenu.setBackground(new Color(0, 0, 0));
 		this.panelMenu.add(this.btCandidature);
-		this.panelMenu.add(this.btArchive);
 		this.panelMenu.add(this.btCandidat);
 		this.panelMenu.add(this.btProfessionel);
+		this.panelMenu.add(this.btArchive);
 		this.panelMenu.add(this.btBord);
 		this.panelMenu.add(this.btQuitter);
 		this.add(this.panelMenu); //ajouter le panelmenu à la page
@@ -130,7 +130,7 @@ public class VueGenerale extends JFrame implements ActionListener {
 		
 		if(e.getSource() == this.btQuitter)
 		{
-			int retour = JOptionPane.showConfirmDialog(this, "Quitter Application","Vous-vous quitter l'application ?",
+			int retour = JOptionPane.showConfirmDialog(this, "Quitter Application","Déconnexion",
 					JOptionPane.YES_NO_OPTION);
 			if(retour == 0)
 			{

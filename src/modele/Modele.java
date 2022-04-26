@@ -62,7 +62,8 @@ public class Modele {
 	+ unCandidat.getMail()+"','"
 	+ unCandidat.getMdp()+"','"
 	+ unCandidat.getRole()+"','"
-	+ unCandidat.getNumd()+"');";
+	+ unCandidat.getNumd()+"','"
+	+ unCandidat.getCommentaire()+"');";
 		
 	try {
 			uneBdd.seConnecter();
@@ -89,6 +90,7 @@ public class Modele {
 		+ "',mdp = '"  + unCandidat.getMdp()
 		+ "',role = '"  + unCandidat.getRole()
 		+"',numd='"+ unCandidat.getNumd()
+		+"',commentaire='"+ unCandidat.getCommentaire()
 		+"' where id = "+unCandidat.getId();
 		
 		try {
@@ -127,7 +129,7 @@ public class Modele {
 						desResultats.getString ("prenom"), 
 						desResultats.getString ("nom"), desResultats.getString ("adresse"),
 						desResultats.getString ("cp"), desResultats.getString ("ville"), desResultats.getString("mail")
-						, desResultats.getString ("mdp"), desResultats.getString ("role")
+						, desResultats.getString ("mdp"), desResultats.getString ("role"), desResultats.getString("commentaire")
 						);
 				//On ajoute cet objet р la liste des Candidats 
 				lesCandidats.add(unCandidat);
@@ -174,7 +176,7 @@ public class Modele {
 						desResultats.getString ("prenom"), 
 						desResultats.getString ("nom"), desResultats.getString ("adresse"),
 						desResultats.getString ("cp"), desResultats.getString ("ville"), desResultats.getString("mail")
-						, desResultats.getString ("mdp"), desResultats.getString ("role")
+						, desResultats.getString ("mdp"), desResultats.getString ("role"), desResultats.getString("commentaire")
 						);
 				//On ajoute cet objet ра la liste des Candidats 
 				lesCandidats.add(unCandidat);
@@ -210,7 +212,7 @@ public class Modele {
 						desResultats.getString ("prenom"), 
 						desResultats.getString ("nom"), desResultats.getString ("adresse"),
 						desResultats.getString ("cp"), desResultats.getString ("ville"), desResultats.getString("mail")
-						, desResultats.getString ("mdp"), desResultats.getString ("role")
+						, desResultats.getString ("mdp"), desResultats.getString ("role"), desResultats.getString("commentaire")
 						);
 				 
 			}
@@ -871,7 +873,7 @@ String requete = "delete from archivecandidature where idcandidature = " + idcan
 									desResultats.getString ("prenom"), 
 									desResultats.getString ("nom"), desResultats.getString ("adresse"),
 									desResultats.getString ("cp"), desResultats.getString ("ville"), desResultats.getString("mail")
-									, desResultats.getString ("mdp"), desResultats.getString ("role")
+									, desResultats.getString ("mdp"), desResultats.getString ("role"), desResultats.getString("commentaire")
 									);
 							lesCandidats.add(unCandidat);
 						}
