@@ -240,6 +240,19 @@ and s.idsecteur = ca.idsecteur
 and d.numdepartement = ca.numdepartement
 and p.idposte = ca.idposte;
 
+//====================================================VUE PRINCIPALE=============================================
+
+
+create or replace view vlescandidatures2 as
+select ca.idcandidature, c.prenom as 'prenomcandidat', c.nom as 'nomcandidat',c.ville as 'villecandidat',c.mail, s.noms as 'secteur', p.intituleposte, d.nomdepartement as 'departementrecherche',
+c.commentaire as 'commentaire'
+from candidat c, secteur s,poste p, departement d,candidature ca
+where c.id = ca.id
+and s.idsecteur = ca.idsecteur
+and d.numdepartement = ca.numdepartement
+and p.idposte = ca.idposte;
+
+
 
 //======================================================CREATION TABLE ARCHIVAGE==========================================
 
