@@ -13,6 +13,7 @@ import controleur.Poste;
 import controleur.Professionel;
 import controleur.Secteur;
 import controleur.User;
+import controleur.Vlescandidatures;
 
 
 public class Modele {
@@ -191,14 +192,20 @@ public class Modele {
 		return lesCandidats; 
 	}
 	//===============================================================================
-	public static Candidat selectWhereCandidat(String mail) {
+	public static Candidat selectWhereCandidat(String mail, int id) {
 		 
 		Candidat unCandidat =null; 
 		
 		String requete =""; 
-	
+		if (id == 0)
+		{
 			requete= "select * from candidat where mail ='"+mail+"'; "; 
-		
+		}
+		else
+		{
+			requete ="select * from candidat where id ='" + id +"' ; ";
+		}
+		System.out.println(requete);
 		try {
 			uneBdd.seConnecter();
 			Statement unStat = uneBdd.getMaConnexion().createStatement(); //curseur 
@@ -604,7 +611,8 @@ public class Modele {
 					+ uneCandidature.getIdsecteur() + "', '" 
 					+ uneCandidature.getId() + "', '"
 					+ uneCandidature.getNumdepartement() + "', '"
-					+ uneCandidature.getIdposte() + "');";
+					+ uneCandidature.getIdposte() + "', '"
+					+ uneCandidature.getEtat() + "');";
 			try {
 				uneBdd.seConnecter();
 				Statement unStat = uneBdd.getMaConnexion().createStatement(); //curseur 
@@ -649,7 +657,8 @@ public class Modele {
 					Candidature uneCandidature = new Candidature (
 							desResultats.getInt("idcandidature"), desResultats.getInt ("idsecteur"),
 							desResultats.getInt ("id"),
-							desResultats.getInt ("numdepartement"), desResultats.getInt ("idposte")
+							desResultats.getInt ("numdepartement"), desResultats.getInt ("idposte"), 
+							desResultats.getString("etat")
 							);
 					//On ajoute cet objet à la liste des Candidatures 
 					lesCandidatures.add(uneCandidature);
@@ -697,7 +706,8 @@ public class Modele {
 					uneCandidature = new Candidature (
 							unResultat.getInt("idcandidature"), unResultat.getInt ("idsecteur"),
 							unResultat.getInt ("id"),
-							unResultat.getInt ("numdepartement"), unResultat.getInt ("idposte")
+							unResultat.getInt ("numdepartement"), unResultat.getInt ("idposte"), 
+							unResultat.getString("etat")
 							);
 				}
 				unStat.close(); 
@@ -949,7 +959,8 @@ String requete = "delete from archivecandidature where idcandidature = " + idcan
 							desResultats.getInt("idsecteur"),
 							desResultats.getInt("id"),
 							desResultats.getInt("numdepartement"),
-							desResultats.getInt("idposte")
+							desResultats.getInt("idposte"), 
+							desResultats.getString("etat")
 							);
 					lesCandidatures.add(unCandidature);
 				}
@@ -965,8 +976,10 @@ String requete = "delete from archivecandidature where idcandidature = " + idcan
 			String requete = "UPDATE candidature SET idsecteur = '"
 					+ uneCandidature.getIdsecteur() + "', id = '" 
 					+ uneCandidature.getId() + "', numdepartement = '"
-					+ uneCandidature.getNumdepartement() + "', idposte = '"
+					+ uneCandidature.getNumdepartement() + "', etat = '"
+							+ uneCandidature.getEtat() + "', idposte = '"
 					+ uneCandidature.getIdposte() + "' WHERE id = "+uneCandidature.getId()+";";
+			
 			try {
 				uneBdd.seConnecter();
 				Statement unStat = uneBdd.getMaConnexion().createStatement();
@@ -994,6 +1007,112 @@ String requete = "delete from archivecandidature where idcandidature = " + idcan
 				System.out.println("Erreur de requete : " + requete);
 			}
 			return nbvols;
+		}
+		
+		//===========================================VLESCANDIDATURES AFFICHER==============================
+		public static ArrayList<Vlescandidatures> selectAllVlescandidatures() {
+			 
+			ArrayList<Vlescandidatures> lesVlescandidatures = new ArrayList<Vlescandidatures>(); 
+			String requete ; 
+			
+				requete = "select * from vlescandidatures2"; 
+			
+			try {
+				uneBdd.seConnecter();
+				Statement unStat = uneBdd.getMaConnexion().createStatement(); //curseur 
+				ResultSet desResultats = unStat.executeQuery(requete); //fetchAll de PHP 
+				//parcours des résultats pour construire les instances dES professionels 
+				while (desResultats.next()) //tant qu'il n'y a un résultat suivant 
+				{
+					Vlescandidatures unVlescandidatures = new Vlescandidatures (
+							desResultats.getInt("idcandidature"),
+							desResultats.getString("prenomcandidat"),
+							desResultats.getString ("nomcandidat"), desResultats.getString ("villecandidat"),
+							desResultats.getString ("mail"), desResultats.getString ("secteur"), desResultats.getString("intituleposte")
+							, desResultats.getString ("departementrecherche"),desResultats.getString ("commentaire")							);
+					//On ajoute cet objet à la liste des Candidats 
+					lesVlescandidatures.add(unVlescandidatures);
+				}
+				unStat.close(); 
+				uneBdd.seDeconnecter();
+			}
+			catch (SQLException exp)
+			{
+				System.out.println("Erreur execution requete : " + requete);
+			}
+			return lesVlescandidatures; 
+		}
+		
+		//=======================================VLESCANDIDATURES SELECTWHERE==========================================
+		public static Vlescandidatures selectWhereVlescandidatures (int idcandidature)
+		{
+			//Ici il s'agit de se connnecter à son compte admin.
+			Vlescandidatures unVlescandidatures = null;
+			String requete = "select * from vlescandidatures2 where idcandidature ='" + idcandidature + "' ; ";
+			try {
+				uneBdd.seConnecter();
+				Statement unStat = uneBdd.getMaConnexion().createStatement();
+				ResultSet unResultat = unStat.executeQuery(requete); 
+				
+				if (unResultat.next())
+				{
+					unVlescandidatures = new Vlescandidatures(
+							unResultat.getInt("idcandidature"),
+					unResultat.getString("prenomcandidat"),
+					unResultat.getString("nomcandidat"),
+					unResultat.getString("villecandidat"),
+					unResultat.getString("mail"),
+					unResultat.getString("secteur"),
+					unResultat.getString("intituleposte"),
+					unResultat.getString("departementrecherche"), 
+				    unResultat.getString("commentaire")
+				    );
+				}
+				unStat.close();
+				uneBdd.seDeconnecter();
+
+			}
+			catch(SQLException exp)
+			{
+				System.out.println("Erreur execution requete : " + requete);
+			}
+			return unVlescandidatures;
+		}
+		
+		//==============================================================
+		public static Vlescandidatures selectMaxid()
+		{
+			//Ici il s'agit de se connnecter à son compte admin.
+			Vlescandidatures unVlescandidatures = null;
+			String requete = "select * from vlescandidatures2 where idcandidature = (select max(idcandidature) from candidature) ; ";
+			try {
+				uneBdd.seConnecter();
+				Statement unStat = uneBdd.getMaConnexion().createStatement();
+				ResultSet unResultat = unStat.executeQuery(requete); 
+				
+				if (unResultat.next())
+				{
+					unVlescandidatures = new Vlescandidatures(
+							unResultat.getInt("idcandidature"),
+					unResultat.getString("prenomcandidat"),
+					unResultat.getString("nomcandidat"),
+					unResultat.getString("villecandidat"),
+					unResultat.getString("mail"),
+					unResultat.getString("secteur"),
+					unResultat.getString("intituleposte"),
+					unResultat.getString("departementrecherche"), 
+				    unResultat.getString("commentaire")
+				    );
+				}
+				unStat.close();
+				uneBdd.seDeconnecter();
+
+			}
+			catch(SQLException exp)
+			{
+				System.out.println("Erreur execution requete : " + requete);
+			}
+			return unVlescandidatures;
 		}
 }
 	

@@ -147,7 +147,6 @@ public class VueGenerale extends JFrame implements ActionListener {
 			this.logo.setVisible(false);
 			this.unPanelArchives.setVisible(false);
 			
-			
 		}
 		else if(e.getSource() ==this.btProfessionel)
 		{

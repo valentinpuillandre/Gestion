@@ -67,7 +67,8 @@ public class VueConnexion extends JFrame implements ActionListener, KeyListener{
 		this.btAnnuler.setFont(new Font("Lucida",30,23));
 		this.btAnnuler.setBackground(new Color(84, 140, 168));
 		this.btConnexion.setBackground(new Color(84, 140, 168));
-		
+		this.txtEmail.setText("v@gmail.com");
+		this.txtMdp.setText("123456789");
 		
 		this.panelConnexion.add(this.btConnexion);
 		this.add(this.panelConnexion);

@@ -2,14 +2,16 @@ package controleur;
 
 public class Candidature {
 private int idcandidature, idsecteur, id, numdepartement, idposte;
+private String etat;
 
-public Candidature(int idcandidature, int idsecteur, int id, int numdepartement, int idposte) {
+public Candidature(int idcandidature, int idsecteur, int id, int numdepartement, int idposte, String etat) {
 	super();
 	this.idcandidature = idcandidature;
 	this.idsecteur = idsecteur;
 	this.id = id;
 	this.numdepartement = numdepartement;
 	this.idposte = idposte;
+	this.etat = etat;
 }
 
 public int getIdcandidature() {
@@ -50,6 +52,14 @@ public int getIdposte() {
 
 public void setIdposte(int idposte) {
 	this.idposte = idposte;
+}
+
+public String getEtat() {
+	return etat;
+}
+
+public void setEtat(String etat) {
+	this.etat = etat;
 }
 
 }
